@@ -1,0 +1,71 @@
+/*
+ * Print styles: only the quote sheet is printed, on one page.
+ * No page size is forced, so it works with Letter and A4 (content fits 186 x 255 mm).
+ */
+
+@page {
+  margin: 12mm;
+}
+
+html,
+body {
+  background: #fff !important;
+}
+
+.app-header,
+.banner,
+.total-bar,
+.toast,
+.quote-toolbar,
+.quote-hint,
+.quote-warning,
+#view-calculator,
+#view-admin {
+  display: none !important;
+}
+
+.app-main {
+  max-width: none;
+  margin: 0;
+  padding: 0 !important;
+}
+
+#view-quote {
+  display: block !important;
+}
+
+.quote-preview {
+  height: auto !important;
+  overflow: visible;
+}
+
+.quote-page {
+  width: auto;
+  padding: 0;
+  box-shadow: none;
+  transform: none !important;
+}
+
+.quote-sheet {
+  width: 100%;
+  break-inside: avoid;
+}
+
+.q-header,
+.q-client,
+.q-table,
+.q-total,
+.q-conditions {
+  break-inside: avoid;
+}
+
+/* Printing from another screen: there is no quote to print yet. */
+body:not(.route-cotizacion) .quote-preview {
+  display: none !important;
+}
+
+body:not(.route-cotizacion) .print-placeholder {
+  display: block !important;
+  font: 12pt/1.4 Arial, sans-serif;
+  color: #111;
+}

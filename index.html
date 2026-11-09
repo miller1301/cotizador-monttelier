@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Calculadora comercial · Monttelier</title>
+  <meta name="description" content="Herramienta interna de Monttelier Arquitectura para calcular y cotizar pérgolas palilleras.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#081f5c">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Monttelier">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body class="route-calculadora">
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a class="brand" href="#/calculadora" aria-label="Ir a la calculadora">
+        <img src="assets/logo-monttelier.png" alt="Monttelier" width="102" height="30">
+      </a>
+      <nav class="app-nav" aria-label="Secciones">
+        <a href="#/calculadora" data-route="calculadora">Calculadora</a>
+        <a href="#/admin" data-route="admin">Administración</a>
+      </nav>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" role="alert" hidden></div>
+
+  <main class="app-main">
+    <!-- ============ CALCULATOR ============ -->
+    <section id="view-calculator" class="view" aria-labelledby="calc-title">
+      <h1 id="calc-title" class="sr-only">Calculadora de pérgolas palilleras</h1>
+      <div class="calc-layout">
+        <form id="calc-form" class="calc-form" novalidate autocomplete="off">
+
+          <section class="card" aria-labelledby="dims-title">
+            <h2 class="card-title" id="dims-title"><span class="step">1</span>Dimensiones del proyecto</h2>
+            <div class="measure-grid">
+              <div class="field">
+                <label class="label" for="in-width">Ancho (m)</label>
+                <div class="stepper">
+                  <button type="button" class="stepper__btn" data-step-for="in-width" data-step="-1" aria-label="Ancho 0,25 m menos">−</button>
+                  <input class="input stepper__input" id="in-width" name="width" type="text" inputmode="decimal" placeholder="0,00" enterkeyhint="next" aria-describedby="dims-note">
+                  <button type="button" class="stepper__btn" data-step-for="in-width" data-step="1" aria-label="Ancho 0,25 m más">+</button>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label" for="in-projection">Proyección o largo (m)</label>
+                <div class="stepper">
+                  <button type="button" class="stepper__btn" data-step-for="in-projection" data-step="-1" aria-label="Proyección 0,25 m menos">−</button>
+                  <input class="input stepper__input" id="in-projection" name="projection" type="text" inputmode="decimal" placeholder="0,00" enterkeyhint="next" aria-describedby="dims-note">
+                  <button type="button" class="stepper__btn" data-step-for="in-projection" data-step="1" aria-label="Proyección 0,25 m más">+</button>
+                </div>
+              </div>
+            </div>
+            <p class="note" id="dims-note"></p>
+            <p class="field-error" id="err-dims" hidden></p>
+            <p class="special-notice" id="special-notice" role="alert" hidden></p>
+          </section>
+
+          <fieldset class="card">
+            <legend class="card-title"><span class="step">2</span>Configuración de instalación</legend>
+            <div class="choices choices--3" id="choices-matrix"></div>
+          </fieldset>
+
+          <fieldset class="card">
+            <legend class="card-title"><span class="step">3</span>Tipo de accionamiento</legend>
+            <div class="choices choices--2" id="choices-actuation"></div>
+            <p class="note" id="actuation-note"></p>
+          </fieldset>
+
+          <fieldset class="card">
+            <legend class="card-title"><span class="step">4</span>Tipo de lona</legend>
+            <div class="choices choices--3" id="choices-fabric"></div>
+          </fieldset>
+
+          <section class="card" aria-labelledby="qty-title">
+            <h2 class="card-title" id="qty-title"><span class="step">5</span>Cantidad de unidades</h2>
+            <div class="stepper stepper--qty">
+              <button type="button" class="stepper__btn" data-step-for="in-quantity" data-step="-1" aria-label="Una unidad menos">−</button>
+              <input class="input stepper__input" id="in-quantity" name="quantity" type="text" inputmode="numeric" aria-label="Cantidad de unidades" aria-describedby="qty-note">
+              <button type="button" class="stepper__btn" data-step-for="in-quantity" data-step="1" aria-label="Una unidad más">+</button>
+            </div>
+            <p class="note" id="qty-note"></p>
+            <p class="field-error" id="err-quantity" hidden></p>
+          </section>
+
+          <section class="card" aria-labelledby="transport-title">
+            <h2 class="card-title" id="transport-title"><span class="step">6</span>Transporte e instalación</h2>
+            <div class="field">
+              <label class="label" for="in-department">Departamento</label>
+              <select class="input select" id="in-department" name="department"></select>
+            </div>
+            <div class="field-row" id="other-transport" hidden>
+              <div class="field">
+                <label class="label" for="in-other-name">Departamento o ciudad</label>
+                <input class="input" id="in-other-name" type="text" autocomplete="off" placeholder="Ej.: Valle del Cauca">
+              </div>
+              <div class="field">
+                <label class="label" for="in-other-value">Valor del transporte ($)</label>
+                <input class="input input--money" id="in-other-value" type="text" inputmode="numeric" placeholder="0">
+              </div>
+            </div>
+            <p class="field-error" id="err-transport" hidden></p>
+
+            <div class="installation">
+              <div class="installation__line">
+                <span>Instalación</span>
+                <strong id="installation-value">—</strong>
+              </div>
+              <p class="note" id="installation-note"></p>
+              <label class="check">
+                <input type="checkbox" id="in-installation-manual">
+                <span>Ajustar valor manualmente</span>
+              </label>
+              <div class="field" id="installation-manual-field" hidden>
+                <label class="label" for="in-installation-value">Valor de instalación ($)</label>
+                <input class="input input--money" id="in-installation-value" type="text" inputmode="numeric" placeholder="0">
+              </div>
+              <p class="field-error" id="err-installation" hidden></p>
+            </div>
+          </section>
+
+          <details class="card card--details" id="client-card">
+            <summary class="card-title"><span class="step">7</span>Datos del cliente <span class="optional">(opcional)</span></summary>
+            <div class="field-grid">
+              <div class="field field--wide">
+                <label class="label" for="in-client-name">Nombre o empresa</label>
+                <input class="input" id="in-client-name" data-client="name" type="text" autocomplete="off">
+              </div>
+              <div class="field">
+                <label class="label" for="in-client-document">NIT / C.C.</label>
+                <input class="input" id="in-client-document" data-client="document" type="text" autocomplete="off">
+              </div>
+              <div class="field">
+                <label class="label" for="in-client-phone">Teléfono</label>
+                <input class="input" id="in-client-phone" data-client="phone" type="tel" autocomplete="off">
+              </div>
+              <div class="field">
+                <label class="label" for="in-client-email">Correo</label>
+                <input class="input" id="in-client-email" data-client="email" type="email" autocomplete="off">
+              </div>
+              <div class="field">
+                <label class="label" for="in-client-address">Dirección o ciudad del proyecto</label>
+                <input class="input" id="in-client-address" data-client="address" type="text" autocomplete="off">
+              </div>
+            </div>
+          </details>
+        </form>
+
+        <aside class="summary-col">
+          <section class="card summary" id="summary" aria-labelledby="summary-title">
+            <h2 class="card-title" id="summary-title">Resumen</h2>
+            <dl class="summary__list" id="summary-list"></dl>
+            <div class="alternatives" id="alternatives" hidden></div>
+            <div class="pending" id="pending" hidden>
+              <p class="pending__title">Para generar la cotización falta:</p>
+              <ul class="pending__list" id="pending-list"></ul>
+            </div>
+            <button type="button" class="btn btn-primary btn-xl" id="btn-generate" disabled>GENERAR COTIZACIÓN / IMPRIMIR PDF</button>
+            <div class="summary__footer">
+              <span class="note" id="draft-number"></span>
+              <button type="button" class="btn btn-link" id="btn-new-quote">Nueva cotización</button>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ QUOTE PREVIEW ============ -->
+    <section id="view-quote" class="view view--quote" aria-label="Cotización" hidden>
+      <div class="quote-toolbar">
+        <a class="btn btn-ghost" href="#/calculadora">← Corregir datos</a>
+        <button type="button" class="btn btn-primary" id="btn-print">IMPRIMIR / GUARDAR PDF</button>
+        <button type="button" class="btn btn-ghost" id="btn-new-from-quote">Nueva cotización</button>
+      </div>
+      <p class="note quote-hint">Para guardar el PDF elige «Guardar como PDF» como impresora. En el celular usa la opción Imprimir o Compartir.</p>
+      <p class="quote-warning" id="quote-warning" role="alert" hidden></p>
+      <div class="quote-preview" id="quote-preview">
+        <div class="quote-page" id="quote-page"></div>
+      </div>
+      <p class="print-placeholder">Para imprimir una cotización usa el botón «GENERAR COTIZACIÓN / IMPRIMIR PDF» de la calculadora.</p>
+    </section>
+
+    <!-- ============ ADMIN ============ -->
+    <section id="view-admin" class="view view--admin" aria-labelledby="admin-title" hidden>
+      <div class="admin-head">
+        <h1 id="admin-title" class="admin-head__title">Administración</h1>
+        <p class="note">Cambia precios, valores y textos sin tocar el código. Los cambios se aplican al presionar «Guardar cambios» y quedan guardados en este navegador. Usa «Respaldo» para llevarlos a otro dispositivo.</p>
+      </div>
+      <div class="admin-errors" id="admin-errors" role="alert" hidden></div>
+      <div id="admin-root"></div>
+      <div class="admin-bar">
+        <span class="admin-bar__status" id="admin-status">Sin cambios pendientes</span>
+        <button type="button" class="btn btn-ghost" id="btn-admin-discard" disabled>Descartar</button>
+        <button type="button" class="btn btn-primary" id="btn-admin-save" disabled>Guardar cambios</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="total-bar" id="total-bar">
+    <button type="button" class="total-bar__btn" id="total-bar-btn" aria-controls="summary">
+      <span class="total-bar__label" id="total-bar-label">Total con IVA</span>
+      <span class="total-bar__value" id="total-bar-value">—</span>
+    </button>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/default-config.js" defer></script>
+  <script src="js/format.js" defer></script>
+  <script src="js/pricing.js" defer></script>
+  <script src="js/storage.js" defer></script>
+  <script src="js/dom.js" defer></script>
+  <script src="js/calculator.js" defer></script>
+  <script src="js/quote.js" defer></script>
+  <script src="js/admin.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
